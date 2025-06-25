@@ -11,7 +11,7 @@ jobs:
       sonar_token: ${{ secrets.SONAR_TOKEN }}
 
   build-docker:
-    uses: ./.github/workflows/docker-publish.yml\
+    uses: ./.github/workflows/docker-publish.yml
     secrets:
       docker_hub_user: ${{ secrets.DOCKER_HUB_USER }}
       docker_hub_pass: ${{ secrets.DOCKER_HUB_PASS }}
