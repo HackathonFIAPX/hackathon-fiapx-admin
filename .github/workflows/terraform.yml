@@ -46,4 +46,3 @@ jobs:
             -var "aws_session_token=${{ secrets.AWS_SESSION_TOKEN }}" \
             -var "aws_bucket_name=${{ vars.TF_MAIN_BUCKET_NAME }}" \
             -var "aws_region=${{ vars.AWS_REGION }}"
-
