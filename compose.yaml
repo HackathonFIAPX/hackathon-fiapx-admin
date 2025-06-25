@@ -1,0 +1,23 @@
+services:
+  dynamodb:
+    image: amazon/dynamodb-local:2.6.1
+    restart: unless-stopped
+    ports:
+      - ${DYNAMODB_PORT:-8000}:8000
+    command: "-jar DynamoDBLocal.jar -sharedDb"
+    healthcheck:
+      test: ["CMD-SHELL", "curl http://localhost:8000 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  app:
+    build: .
+    volumes:
+      - .:/home/node/app
+    ports:
+      - ${PORT:-3000}:3000
+    depends_on:
+      dynamodb:
+        condition: service_healthy

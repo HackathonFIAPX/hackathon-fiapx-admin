@@ -1,0 +1,16 @@
+name: Main Pipeline
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  run-tests:
+    uses: ./.github/workflows/sonarcloud.yml
+
+  build-docker:
+    uses: ./.github/workflows/docker-publish.yml
+
+  deploy-aws:
+    needs: build-docker
+    uses: ./.github/workflows/terraform.yml
