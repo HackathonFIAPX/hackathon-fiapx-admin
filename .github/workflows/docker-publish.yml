@@ -2,6 +2,13 @@ name: Docker Image CI/CD
 
 on:
   workflow_call:
+    secrets:
+      docker_hub_user:
+        required: true
+        description: 'Docker Hub username'
+      docker_hub_pass:
+        required: true
+        description: 'Docker Hub password (PAT or actual password)'
 
 jobs:
   build-and-push:
@@ -17,11 +24,11 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKER_HUB_USER }}
-          password: ${{ secrets.DOCKER_HUB_PASS }}
+          username: ${{ secrets.docker_hub_user }}
+          password: ${{ secrets.docker_hub_pass }}
 
       - name: Build Docker Image
-        run: docker build -t ${{ secrets.DOCKER_HUB_USER }}/hackathon-fiapx-admin:${{ env.TC_IMAGE_TAG }} -f devops/docker/Dockerfile .
+        run: docker build -t ${{ secrets.docker_hub_user }}/hackathon-fiapx-admin:${{ env.TC_IMAGE_TAG }} -f devops/docker/Dockerfile .
 
       - name: Push Docker Image
-        run: docker push ${{ secrets.DOCKER_HUB_USER }}/hackathon-fiapx-admin:${{ env.TC_IMAGE_TAG }}
+        run: docker push ${{ secrets.docker_hub_user }}/hackathon-fiapx-admin:${{ env.TC_IMAGE_TAG }}
