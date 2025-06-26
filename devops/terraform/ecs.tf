@@ -6,7 +6,7 @@ resource "aws_ecs_service" "app_service" {
   name                    = "fiapx-admin-service"
   cluster                 = aws_ecs_cluster.ecs_cluster.id
   task_definition         = aws_ecs_task_definition.app_task.arn
-  desired_count           = 2
+  desired_count           = 1
   launch_type             = "FARGATE"
   force_new_deployment    = true
 
