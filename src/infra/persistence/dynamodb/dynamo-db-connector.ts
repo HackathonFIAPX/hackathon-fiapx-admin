@@ -23,8 +23,7 @@ export class DynamoDBConnector implements IDataBaseConnector {
         if (this.isConnectedFlag) return true;
 
         try {
-            const { region, host, accessKeyId, secretAccessKey } = envDynamoDB;
-            const endpoint = `${host}`;
+            const { region, endpoint, accessKeyId, secretAccessKey } = envDynamoDB;
 
             const clientConfig = {
                 region: region,
