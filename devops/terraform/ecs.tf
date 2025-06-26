@@ -26,7 +26,7 @@ resource "aws_ecs_service" "app_service" {
     type = "ECS"
   }
 
-  depends_on = [aws_lb_listener.http]
+  depends_on = [aws_lb_listener.ecs_listener]
 }
 
 resource "aws_ecs_task_definition" "app_task" {
