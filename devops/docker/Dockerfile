@@ -1,6 +1,6 @@
 FROM node:22-slim AS builder
 
-RUN apt update && apt install -y openssl procps git
+RUN apt update && apt install -y openssl procps git curl
 
 WORKDIR /home/node/app
 COPY . .
