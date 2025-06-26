@@ -77,7 +77,7 @@ resource "aws_ecs_task_definition" "app_task" {
         {
           name  = "DYNAMODB_REGION"
           value = var.aws_region
-        }
+        },
         {
           name  = "DYNAMODB_TABLE"
           value = "fiapx-admin"
