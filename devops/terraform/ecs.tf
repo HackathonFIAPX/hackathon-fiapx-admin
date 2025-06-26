@@ -114,3 +114,33 @@ resource "aws_ecs_task_definition" "app_task" {
 resource "aws_cloudwatch_log_group" "ecs_log_group" {
   name = "/ecs/fiapx-admin-service"
 }
+
+resource "aws_appautoscaling_target" "ecs_service_scale_target" {
+  service_namespace  = "fiapx-admin-service"
+  resource_id        = "service/${aws_ecs_cluster.ecs_cluster.name}/${aws_ecs_service.app_service.name}"
+  scalable_dimension = "ecs:service:DesiredTaskCount"
+  min_capacity       = 1
+  max_capacity       = 3
+}
+
+resource "aws_appautoscaling_policy" "ecs_cpu_scaling_policy" {
+  name               = "fiapx-admin-cpu-scaling-policy"
+  service_namespace  = "ecs"
+  resource_id        = aws_appautoscaling_target.ecs_service_scale_target.resource_id
+  scalable_dimension = aws_appautoscaling_target.ecs_service_scale_target.scalable_dimension
+
+  policy_type = "TargetTrackingScaling"
+
+  target_tracking_scaling_policy_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ECSServiceAverageCPUUtilization"
+    }
+
+    target_value = 80
+
+    scale_in_cooldown  = 300
+    scale_out_cooldown = 30
+  }
+
+  depends_on = [aws_ecs_service.app_service]
+}
