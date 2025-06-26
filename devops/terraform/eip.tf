@@ -10,7 +10,7 @@ resource "aws_subnet" "private" {
 }
 
 resource "aws_eip" "nat" {
-  vpc = true
+  # No 'vpc = true' needed here anymore.
 }
 
 resource "aws_nat_gateway" "nat" {
