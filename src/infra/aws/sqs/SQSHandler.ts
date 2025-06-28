@@ -1,13 +1,13 @@
 import { SendMessageCommand, SQSClient } from "@aws-sdk/client-sqs"
-import { envSQS } from "@config/variables/sqs"
+import { envAWS } from "@config/variables/aws"
 import { Logger } from "@infra/utils/logger/Logger"
 
 const sqsClient = new SQSClient({
-    region: envSQS.region,
+    region: envAWS.region,
     credentials: {
-        accessKeyId: envSQS.accessKeyId,
-        secretAccessKey: envSQS.secretAccessKey,
-        sessionToken: envSQS.awsSessionToken,
+        accessKeyId: envAWS.accessKeyId,
+        secretAccessKey: envAWS.secretAccessKey,
+        sessionToken: envAWS.awsSessionToken,
     }
 })
 

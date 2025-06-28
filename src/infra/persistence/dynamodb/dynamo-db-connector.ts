@@ -2,7 +2,7 @@ import { DynamoDBClient, ListTablesCommand } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import { IDataBaseConnector } from "../IDataBaseConnector";
 import { Logger } from "@infra/utils/logger/Logger";
-import { envDynamoDB } from "@config/variables/dynamodn";
+import { envDynamoDB } from "@config/variables/dynamodb";
 
 export class DynamoDBConnector implements IDataBaseConnector {
     private static instance: DynamoDBConnector;
