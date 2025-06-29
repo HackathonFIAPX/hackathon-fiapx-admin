@@ -1,5 +1,5 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import { TVideoUploadFileType, TGetPresignedUrlParams, TGetPresignedUrlResponse } from "./TS3Handler";
+import { TVideoUploadFileType, TGetPresignedUrlParams, TGetPresignedUrlResponse, TUploadType } from "./TS3Handler";
 import { envAWS } from "@config/variables/aws";
 import { envS3 } from "@config/variables/s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
@@ -22,10 +22,19 @@ export class S3Handler implements IS3Handler {
         mp4: 'video/mp4',
     }
 
+    private pathByType: { [K in TUploadType]: string } = {
+        video: 'temp_videos',
+    }
+
     public async getPresignedUrl(input: TGetPresignedUrlParams): Promise<TGetPresignedUrlResponse> {
         const { uploadType, fileName, fileType, contentLength, expiresIn } = input;
 
-        const key = `${uploadType}/${fileName}.${fileType}`;
+        const path = this.pathByType[uploadType]
+        if (!path) {
+            throw new Error(`Unsupported upload type: ${uploadType}`);
+        }
+
+        const key = `${path}/${fileName}.${fileType}`;
         const contentType = this.availableContentTypes[fileType];
 
         if (!contentType) {
