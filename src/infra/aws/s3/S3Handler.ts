@@ -5,6 +5,7 @@ import { envS3 } from "@config/variables/s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { IS3Handler } from "./IS3Handler";
 import { injectable } from "tsyringe";
+import { Logger } from "@infra/utils/logger/Logger";
 
 const s3Client = new S3Client({
     region: envAWS.region,
@@ -31,6 +32,16 @@ export class S3Handler implements IS3Handler {
             throw new Error(`Unsupported file type: ${fileType}`);
         }
         
+        Logger.info({
+            message: 'S3Handler',
+            additionalInfo: {
+                Bucket: envS3.bucketName,
+                Key: key,
+                ContentType: contentType,
+                ContentLength: contentLength,
+            }
+        });
+
         const command = new PutObjectCommand({
             Bucket: envS3.bucketName,
             Key: key,
