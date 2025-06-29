@@ -8,7 +8,7 @@ resource "aws_s3_bucket" "video_upload_bucket" {
   }
 }
 
-resource "aws_s3_bucket_lifecycle_configuration" "regra_expiracao_curta_duracao" {
+resource "aws_s3_bucket_lifecycle_configuration" "zip_expiration_rule" {
   bucket = aws_s3_bucket.meu_bucket_uploads_curtas.id
 
   rule {
@@ -25,7 +25,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "regra_expiracao_curta_duracao"
   }
 }
 
-resource "aws_s3_bucket_lifecycle_configuration" "regra_expiracao_curta_duracao" {
+resource "aws_s3_bucket_lifecycle_configuration" "video_expiration_rule" {
   bucket = aws_s3_bucket.meu_bucket_uploads_curtas.id
 
   rule {
