@@ -4,6 +4,7 @@ import { envAWS } from "@config/variables/aws";
 import { envS3 } from "@config/variables/s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { IS3Handler } from "./IS3Handler";
+import { injectable } from "tsyringe";
 
 const s3Client = new S3Client({
     region: envAWS.region,
@@ -14,6 +15,7 @@ const s3Client = new S3Client({
     }
 });
 
+@injectable()
 export class S3Handler implements IS3Handler {
     private availableContentTypes: { [K in TVideoUploadFileType]: string } = {
         mp4: 'video/mp4',
