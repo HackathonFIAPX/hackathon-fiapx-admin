@@ -106,6 +106,10 @@ resource "aws_ecs_task_definition" "app_task" {
           name = "HOST"
           value = "0.0.0.0"
         },
+        {
+          name  = "S3_BUCKET_NAME"
+          value = aws_s3_bucket.video_upload_bucket.bucket
+        }
       ]
     }
   ])
