@@ -1,18 +1,18 @@
 import { inject, injectable } from "tsyringe";
-import { IGetPreSignedUrl } from "./IGetPreSignedUrl";
+import { IGetPreSignedUrlUseCase } from "./IGetPreSignedUrlUseCase";
 import { IS3Handler } from "@infra/aws/s3/IS3Handler";
-import { TGetPreSignedUrlInput, TGetPreSignedUrlOutput } from "./TGetPreSignedUrl";
+import { TGetPreSignedUrlUseCaseInput, TGetPreSignedUrlUseCaseOutput } from "./TGetPreSignedUrlUseCase";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024 * 1024; // 10 GB
 
 @injectable()
-export class GetPresignedUrl implements IGetPreSignedUrl {
+export class GetPreSignedUrlUseCase implements IGetPreSignedUrlUseCase {
     constructor(
         @inject('IS3Handler')
         private readonly s3Handler: IS3Handler
     ) {}
 
-    async execute(input: TGetPreSignedUrlInput): Promise<TGetPreSignedUrlOutput> {
+    async execute(input: TGetPreSignedUrlUseCaseInput): Promise<TGetPreSignedUrlUseCaseOutput> {
         const { fileType, contentLength } = input;
 
         const fileName = `teste-${Date.now()}`;

@@ -1,12 +1,12 @@
 type TAvailableFileType = 'mp4'
 
-export type TGetPreSignedUrlInput = {
-    userId: string
+export type TGetPreSignedUrlUseCaseInput = {
+    userId?: string
     fileType: TAvailableFileType
     contentLength: number
 }
 
-export type TGetPreSignedUrlOutput = {
+export type TGetPreSignedUrlUseCaseOutput = {
     url: string
     key: string
 }
