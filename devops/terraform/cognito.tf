@@ -1,7 +1,6 @@
 resource "aws_cognito_user_pool" "app_user_pool" {
   name = "fiapx-admin-user-pool"
 
-  auto_verified_attributes = ["email"]
   username_attributes = ["email"]
 
   password_policy {
