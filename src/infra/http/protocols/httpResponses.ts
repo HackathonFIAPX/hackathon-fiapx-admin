@@ -34,4 +34,12 @@ export class HttpResponseHandler {
             statusCode: EHttpStatusCode.CREATED
         }
     }
+
+    static badRequest(message: string): HttpResponse {
+        return {
+            statusCode: EHttpStatusCode.BAD_REQUEST,
+            body: message,
+            type: 'message'
+        }
+    }
 }

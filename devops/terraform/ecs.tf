@@ -109,6 +109,18 @@ resource "aws_ecs_task_definition" "app_task" {
         {
           name  = "S3_BUCKET_NAME"
           value = aws_s3_bucket.video_upload_bucket.bucket
+        },
+        {
+          name  = "COGNITO_USER_POOL_ID"
+          value = aws_cognito_user_pool.app_user_pool.id
+        },
+        {
+          name  = "COGNITO_CLIENT_ID"
+          value = aws_cognito_user_pool_client.app_client.id
+        },
+        {
+          name  = "COGNITO_REGION"
+          value = var.aws_region
         }
       ]
     }

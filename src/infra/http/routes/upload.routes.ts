@@ -6,5 +6,5 @@ import { RouterAdapter } from "../adapters/RouterAdapter"
 const getPresignedUrlController = container.resolve<IController>('GetPresignedUrlController');
 
 export default (route: Router): void => {
-    route.get('/v1/upload/presigned-url', RouterAdapter.adapt(getPresignedUrlController))
+    route.get('/v1/uploads/presigned-url', RouterAdapter.adapt(getPresignedUrlController))
 }
