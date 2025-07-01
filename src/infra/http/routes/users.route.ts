@@ -7,6 +7,6 @@ const userLoginController = container.resolve<IController>('UserLoginController'
 const userSignUpController = container.resolve<IController>('UserSignUpController');
 
 export default (route: Router): void => {
-    route.get('/v1/users/login', RouterAdapter.adapt(userLoginController))
-    route.get('/v1/users/signup', RouterAdapter.adapt(userSignUpController))
+    route.post('/v1/users/login', RouterAdapter.adapt(userLoginController))
+    route.post('/v1/users/signup', RouterAdapter.adapt(userSignUpController))
 }
