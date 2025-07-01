@@ -52,7 +52,7 @@ resource "aws_apigatewayv2_integration" "cognito_integration" {
   api_id             = aws_apigatewayv2_api.ecs_api.id
   integration_type   = "HTTP_PROXY"
   integration_method = "POST"
-  integration_uri    = "https://cognito-idp.${local.region}.amazonaws.com/"
+  integration_uri    = "https://cognito-idp.${var.aws_region}.amazonaws.com/"
 }
 
 resource "aws_apigatewayv2_route" "signup_route" {
