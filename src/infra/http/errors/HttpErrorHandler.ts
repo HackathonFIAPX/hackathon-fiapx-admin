@@ -27,6 +27,8 @@ export class HttpErrorHandler {
             additionalInfo: log
         })
 
+        console.log('HttpErrorHandler.handle', err)
+
         res.status(statusCode).send(respMessage)
         next()
     }

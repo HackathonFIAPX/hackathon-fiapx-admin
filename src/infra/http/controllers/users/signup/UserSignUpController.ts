@@ -18,8 +18,8 @@ export class UserSignUpController implements IController {
             return HttpResponseHandler.badRequest('Email, password and name are required');
         }
 
-        const result = await this.signUpUseCase.execute({ email, password});
+        await this.signUpUseCase.execute({ email, password});
 
-        return HttpResponseHandler.created(result);
+        return HttpResponseHandler.created({ email, password });
     }
 }

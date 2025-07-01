@@ -20,6 +20,6 @@ export class UserLoginController implements IController {
 
         const result = await this.loginUseCase.execute({ email, password });
 
-        return HttpResponseHandler.ok({ email, password })
+        return HttpResponseHandler.ok(result)
     }
 }
