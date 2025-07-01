@@ -1,6 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import { ISignUpUseCase } from "./ISignUpUseCase";
-import { ICognitoHandler } from "@infra/aws/cognito/ICognitoHandler";
+import { ICognitoHandler } from "@infra/aws/cognito/CognitoHandler/ICognitoHandler";
 import { TSignUpUseCaseInput, TSignUpUseCaseOutput } from "./TSignUpUseCase";
 
 @injectable()
