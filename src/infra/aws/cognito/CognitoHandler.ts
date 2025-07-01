@@ -1,4 +1,4 @@
-import { CognitoIdentityProviderClient, InitiateAuthCommand, SignUpCommand } from "@aws-sdk/client-cognito-identity-provider";
+import { AdminCreateUserCommand, AdminSetUserPasswordCommand, CognitoIdentityProviderClient, InitiateAuthCommand, SignUpCommand } from "@aws-sdk/client-cognito-identity-provider";
 import { ICognitoHandler } from "./ICognitoHandler";
 import { TCognitoLogin, TCognitoSignUp } from "./TCognitoHandler";
 import { envCognito } from "@config/variables/cognito";
@@ -27,21 +27,32 @@ export class CognitoHandler implements ICognitoHandler {
     }
 
     async signUp(signUpData: TCognitoSignUp): Promise<void> {
-        const command = new SignUpCommand({
-            ClientId: envCognito.clientId,
-            Username: signUpData.email,
-            Password: signUpData.password,
+        const { email, password } = signUpData;
+          const adminCreateUserCommand = new AdminCreateUserCommand({
+            UserPoolId: envCognito.userPoolId,
+            Username: email,
+            TemporaryPassword: password,
+            MessageAction: "SUPPRESS",
             UserAttributes: [
-                {
-                    Name: "email",
-                    Value: signUpData.email
-                }
-            ]
-        })
-        const result = await cognitoClient.send(command);
+              {
+                Name: "email",
+                Value: email,
+              },
+            ],
+            DesiredDeliveryMediums: [] as any[],
+          });
 
-        if (!result.UserConfirmed) {
-            throw new Error('Sign-up failed: User not confirmed');
-        }
+          const createResult = await cognitoClient.send(adminCreateUserCommand);
+      
+          console.log("Usuário criado com sucesso (status temporário):", createResult.User.Username);
+      
+          const setPasswordParams = {
+            UserPoolId: envCognito.userPoolId,
+            Username: email,
+            Password: password,
+            Permanent: true,
+          };
+          const adminSetUserPasswordCommand = new AdminSetUserPasswordCommand(setPasswordParams);
+          await cognitoClient.send(adminSetUserPasswordCommand);
     }
 }
