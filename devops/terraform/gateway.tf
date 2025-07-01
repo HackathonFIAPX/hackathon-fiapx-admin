@@ -45,3 +45,18 @@ resource "aws_apigatewayv2_stage" "ecs_stage" {
 resource "aws_cloudwatch_log_group" "ecs_api_log_group" {
   name = "/aws/apigateway/fiapx-general-gtw"
 }
+
+
+### Cognito 
+resource "aws_apigatewayv2_integration" "cognito_integration" {
+  api_id             = aws_apigatewayv2_api.ecs_api.id
+  integration_type   = "HTTP_PROXY"
+  integration_method = "POST"
+  integration_uri    = "https://cognito-idp.${local.region}.amazonaws.com/"
+}
+
+resource "aws_apigatewayv2_route" "signup_route" {
+  api_id    = aws_apigatewayv2_api.ecs_api.id
+  route_key = "POST /cognito"
+  target    = "integrations/${aws_apigatewayv2_integration.cognito_integration.id}"
+}
