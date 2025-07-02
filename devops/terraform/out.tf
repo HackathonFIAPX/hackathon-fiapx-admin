@@ -9,3 +9,7 @@ output "cognito_client_id" {
 output "cognito_user_pool_id" {
   value = aws_cognito_user_pool.app_user_pool.id
 }
+
+output "upload_video_sns_topic_arn" {
+  value = aws_sns_topic.video_upload_topic.arn
+}
