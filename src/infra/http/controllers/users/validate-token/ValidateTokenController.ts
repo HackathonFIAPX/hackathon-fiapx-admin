@@ -24,7 +24,7 @@ export class ValidateTokenController implements IController {
         const result = await this.validateTokenUseCase.execute({ token });
 
         if (result.isValid) {
-            return HttpResponseHandler.ok(result.payload);
+            return HttpResponseHandler.ok(result);
         } else {
             return HttpResponseHandler.unauthorized(result);
         }
