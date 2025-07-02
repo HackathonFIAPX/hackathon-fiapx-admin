@@ -42,4 +42,12 @@ export class HttpResponseHandler {
             type: 'message'
         }
     }
+
+    static unauthorized(body: any): HttpResponse {
+        return {
+            statusCode: EHttpStatusCode.UNAUTHORIZED,
+            ...(body && { body }),
+            type: 'json'
+        }
+    }
 }
