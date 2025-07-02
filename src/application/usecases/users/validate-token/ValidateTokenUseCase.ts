@@ -13,7 +13,7 @@ export class ValidateTokenUseCase implements IValidateTokenUseCase {
   async execute(input: TValidateTokenUseCaseInput): Promise<TValidateTokenUseCaseOutput> {
     const { token } = input;
 
-    const validationResult = await this.cognitoToken.validateToken(token, 'id');
+    const validationResult = await this.cognitoToken.validateToken(token, 'access');
 
     return {
       isValid: validationResult.isValid,
