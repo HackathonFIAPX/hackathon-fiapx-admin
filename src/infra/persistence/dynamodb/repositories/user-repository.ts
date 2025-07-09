@@ -5,6 +5,7 @@ import { DynamoDBDocumentClient, PutCommand, QueryCommand, UpdateCommand } from 
 import { envDynamoDB } from "@config/variables/dynamodb";
 import { UserModel } from "../models/user.model";
 import { Video } from "@domain/models/Video";
+import { Logger } from "@infra/utils/logger/Logger";
 
 export class UserRepository implements IUserRepository {
     private dynamoBDDocClient: DynamoDBDocumentClient
@@ -50,6 +51,14 @@ export class UserRepository implements IUserRepository {
 
         if (!response.Items || response.Items.length === 0) return null;
         
+        Logger.info({
+            message: 'User found by clientId',
+            additionalInfo: {
+                clientId: clientId,
+                user: response.Items[0],
+                response: response
+            }
+        })
         const model = UserModel.fromDb(response.Items[0]);
     
         return UserModel.toDomain(model);
