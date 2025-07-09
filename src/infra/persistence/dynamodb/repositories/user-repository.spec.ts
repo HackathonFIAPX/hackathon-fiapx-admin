@@ -148,6 +148,69 @@ describe('UserRepository', () => {
             expect(mockDynamoBDDocClientSend).toHaveBeenCalledWith(expect.any(Object));
             expect(savedUser).toEqual(existingUser);
         });
+
+        it('should handle user found with undefined id', async () => {
+            const existingUser = new User();
+            existingUser.id = undefined;
+            existingUser.clientId = 'client-abc';
+            existingUser.name = 'Test User';
+            existingUser.videos = [];
+
+            jest.spyOn(userRepository, 'findByClientId').mockResolvedValue(existingUser);
+
+            (require('uuid') as any).v4.mockReturnValue('mock-uuid-111');
+
+            const mockUserModelInstance = {
+                id: 'mock-uuid-111',
+                client_id: mockUser.clientId,
+                name: mockUser.name,
+                videos: [] as UserModelVideo[],
+            };
+            mockFromDomain.mockReturnValue(mockUserModelInstance);
+
+            const userToSave = { ...mockUser };
+            const savedUser = await userRepository.save(userToSave);
+
+            expect(savedUser.id).toBe('mock-uuid-111');
+        });
+
+        it('should handle undefined user found', async () => {
+            jest.spyOn(userRepository, 'findByClientId').mockResolvedValue(undefined);
+
+            (require('uuid') as any).v4.mockReturnValue('mock-uuid-789');
+
+            const mockUserModelInstance = {
+                id: 'mock-uuid-789',
+                client_id: mockUser.clientId,
+                name: mockUser.name,
+                videos: [] as UserModelVideo[],
+            };
+            mockFromDomain.mockReturnValue(mockUserModelInstance);
+
+            const userToSave = { ...mockUser };
+            const savedUser = await userRepository.save(userToSave);
+
+            expect(savedUser.id).toBe('mock-uuid-789');
+        });
+
+        it('should save a new user with a undefined initial id', async () => {
+            jest.spyOn(userRepository, 'findByClientId').mockResolvedValue(undefined);
+
+            (require('uuid') as any).v4.mockReturnValue('mock-uuid-456');
+
+            const mockUserModelInstance = {
+                id: 'mock-uuid-456',
+                client_id: mockUser.clientId,
+                name: mockUser.name,
+                videos: [] as UserModelVideo[],
+            };
+            mockFromDomain.mockReturnValue(mockUserModelInstance);
+
+            const userToSave = { ...mockUser };
+            const savedUser = await userRepository.save(userToSave);
+
+            expect(savedUser.id).toBe('mock-uuid-456');
+        });
     });
 
     describe('findByClientId', () => {
@@ -255,6 +318,58 @@ describe('UserRepository', () => {
             newVideo.id = 'video-456';
 
             await expect(userRepository.addVideoToUser('non-existent-client', newVideo)).rejects.toThrow('User not found');
+
+            expect(UpdateCommand).not.toHaveBeenCalled();
+            expect(mockDynamoBDDocClientSend).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('updateVideo', () => {
+        it('should update a video and return the updated video', async () => {
+            const existingUser = new User();
+            existingUser.id = 'user-123';
+            existingUser.clientId = 'client-abc';
+            existingUser.name = 'Test User';
+            const originalVideo = new Video();
+            originalVideo.id = 'video-456';
+            originalVideo.name = 'Original Video';
+            originalVideo.status = EVideoStatus.UPLOADED;
+            existingUser.videos = [originalVideo];
+
+            const updatedVideo = new Video();
+            updatedVideo.id = 'video-456';
+            updatedVideo.name = 'Updated Video';
+            updatedVideo.status = EVideoStatus.FINISHED;
+
+            jest.spyOn(userRepository, 'findByClientId').mockResolvedValue(existingUser);
+
+            const userModelInstance = { ...existingUser, videos: [originalVideo] };
+            mockFromDomain.mockReturnValue(userModelInstance);
+
+            mockDynamoBDDocClientSend.mockResolvedValue({});
+
+            const result = await userRepository.updateVideo('client-abc', updatedVideo);
+
+            expect(userRepository.findByClientId).toHaveBeenCalledWith('client-abc');
+            expect(UpdateCommand).toHaveBeenCalledWith({
+                TableName: 'MockTableName',
+                Key: { id: existingUser.id },
+                UpdateExpression: "SET videos = :videos",
+                ExpressionAttributeValues: {
+                    ":videos": [updatedVideo]
+                }
+            });
+            expect(mockDynamoBDDocClientSend).toHaveBeenCalledWith(expect.any(Object));
+            expect(result).toEqual(updatedVideo);
+        });
+
+        it('should throw an error if user is not found', async () => {
+            jest.spyOn(userRepository, 'findByClientId').mockResolvedValue(null);
+
+            const updatedVideo = new Video();
+            updatedVideo.id = 'video-456';
+
+            await expect(userRepository.updateVideo('non-existent-client', updatedVideo)).rejects.toThrow('User not found');
 
             expect(UpdateCommand).not.toHaveBeenCalled();
             expect(mockDynamoBDDocClientSend).not.toHaveBeenCalled();
