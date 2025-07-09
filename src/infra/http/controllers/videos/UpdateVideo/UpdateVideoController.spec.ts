@@ -32,12 +32,7 @@ describe('UpdateVideoController', () => {
             body: {
                 videoId: 'video-123',
                 status: EVideoStatus.FINISHED,
-            },
-            tokenInfo: {
-                isValid: true,
-                payload: {
-                    username: 'client-123',
-                },
+                clientId: 'client-123',
             },
         };
 
