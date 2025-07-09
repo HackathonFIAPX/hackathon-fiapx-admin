@@ -13,7 +13,7 @@ export class UpdateVideoController implements IController {
 
     async handle(request: HttpRequest): Promise<HttpResponse> {
         const { videoId, status } = request.body;
-        const clientId = request.tokenInfo.payload.client_id;
+        const clientId = request.tokenInfo.payload.username;
 
         const result = await this.updateVideoUseCase.execute({
             clientId,

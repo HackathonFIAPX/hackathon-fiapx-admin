@@ -36,7 +36,7 @@ describe('UpdateVideoController', () => {
             tokenInfo: {
                 isValid: true,
                 payload: {
-                    client_id: 'client-123',
+                    username: 'client-123',
                 },
             },
         };

@@ -18,7 +18,7 @@ export class GetPresignedUrlController implements IController {
         const response = await this.getPresignedUrl.execute({
             contentLength,
             fileType,
-            clientId: tokenInfo?.payload?.client_id,
+            clientId: tokenInfo?.payload?.username,
         });
 
         return HttpResponseHandler.ok(response)

@@ -12,7 +12,7 @@ export class GetAllVideosByUserController implements IController {
     ) {}
 
     async handle(request: HttpRequest): Promise<HttpResponse> {
-        const clientId = request.tokenInfo.payload.client_id;
+        const clientId = request.tokenInfo.payload.username;
 
         const result = await this.getAllVideosByUserUseCase.execute({
             clientId,

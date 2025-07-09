@@ -38,7 +38,7 @@ describe('GetPresignedUrlController', () => {
             headers: {},
             tokenInfo: {
                 payload: {
-                    client_id: 'test-user-id',
+                    username: 'test-user-id',
                 },
             } as any,
         };
