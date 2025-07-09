@@ -3,6 +3,7 @@ import uploadRoutes from './upload.routes'
 import { container } from 'tsyringe'
 import { RouterAdapter } from '../adapters/RouterAdapter'
 import { IController } from '../protocols/controller'
+import { AuthMiddleware } from '../middlewares/auth.middleware'
 
 // Mock express.Router
 const mockGet = jest.fn();
@@ -53,6 +54,6 @@ describe('upload.routes', () => {
 
         // Verify route.get calls
         expect(mockGet).toHaveBeenCalledTimes(1);
-        expect(mockGet).toHaveBeenCalledWith('/v1/uploads/presigned-url', 'adapted-Object');
+        expect(mockGet).toHaveBeenCalledWith('/v1/uploads/presigned-url', AuthMiddleware.handle, 'adapted-Object');
     });
 });
