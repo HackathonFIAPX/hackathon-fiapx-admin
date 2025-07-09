@@ -239,10 +239,10 @@ describe('UserRepository', () => {
             expect(QueryCommand).toHaveBeenCalledTimes(1);
             expect(QueryCommand).toHaveBeenCalledWith({
                 TableName: 'MockTableName',
-                IndexName: 'clientId-index',
-                KeyConditionExpression: 'clientId = :clientId',
+                IndexName: 'client_id-index',
+                KeyConditionExpression: 'client_id = :client_id',
                 ExpressionAttributeValues: {
-                    ':clientId': 'some-client-id',
+                    ':client_id': 'some-client-id',
                 },
                 Limit: 1,
             });

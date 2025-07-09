@@ -9,13 +9,13 @@ resource "aws_dynamodb_table" "example" {
   }
 
   attribute {
-    name = "clientId"
+    name = "client_id"
     type = "S"
   }
 
   global_secondary_index {
-    name               = "clientId-index"
-    hash_key           = "clientId"
+    name               = "client_id-index"
+    hash_key           = "client_id"
     projection_type    = "ALL"
   }
 

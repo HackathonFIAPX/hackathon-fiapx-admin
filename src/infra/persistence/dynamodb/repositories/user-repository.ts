@@ -38,10 +38,10 @@ export class UserRepository implements IUserRepository {
     async findByClientId(clientId: string): Promise<User | null> {
         const command = new QueryCommand({
             TableName: envDynamoDB.tableName,
-            IndexName: "clientId-index", // Assuming you have a GSI for clientId
-            KeyConditionExpression: "clientId = :clientId",
+            IndexName: "client_id-index", // Assuming you have a GSI for client_id
+            KeyConditionExpression: "client_id = :client_id",
             ExpressionAttributeValues: {
-                ":clientId": clientId
+                ":client_id": clientId
             },
             Limit: 1
         });
