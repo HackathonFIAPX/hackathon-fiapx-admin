@@ -114,7 +114,7 @@ export class UserRepository implements IUserRepository {
             Key: { id: user.id },
             UpdateExpression: "SET videos = :videos",
             ExpressionAttributeValues: {
-                ":videos": updatedVideos
+                ":videos": JSON.parse(JSON.stringify(updatedVideos))
             }
         });
     
