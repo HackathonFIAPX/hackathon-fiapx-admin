@@ -38,6 +38,7 @@
     "reflect-metadata": "^0.2.2",
     "ts-node": "^10.9.2",
     "tsyringe": "^4.8.0",
+    "uuid": "^11.1.0",
     "winston": "^3.13.1"
   },
   "devDependencies": {
