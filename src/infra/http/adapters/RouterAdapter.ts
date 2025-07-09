@@ -11,6 +11,7 @@ export class RouterAdapter {
         params:  req.params,
         query:   req.query,
         headers: req.headers,
+        tokenInfo: req.tokenInfo,
       }
   
       try {

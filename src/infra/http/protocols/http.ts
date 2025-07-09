@@ -1,3 +1,5 @@
+import { TValidTokenResult } from "@infra/aws/cognito/CognitoToken/TCognitoToken"
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface HttpResponse {
   statusCode: number
@@ -11,4 +13,5 @@ export interface HttpRequest {
   headers?: any
   params?: any
   query?: any
+  tokenInfo?: TValidTokenResult
 }
