@@ -1,8 +1,9 @@
 import { UserRepository } from './user-repository';
 import { User } from '@domain/models/User';
 import { DynamoDBConnector } from '../dynamo-db-connector';
-import { PutCommand, QueryCommand } from '@aws-sdk/lib-dynamodb';
+import { PutCommand, QueryCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import { Video } from '@domain/models/Video';
+import { EVideoStatus } from '@domain/models/EVideoStatus';
 
 // Mock DynamoDBConnector
 const mockGetDocumentClient = jest.fn();
@@ -23,11 +24,10 @@ const mockDynamoBDDocClient = {
 
 // Mock PutCommand and QueryCommand
 jest.mock('@aws-sdk/lib-dynamodb', () => ({
-    DynamoDBDocumentClient: {
-        from: jest.fn(), // Mock this if it's used, but it's not directly in UserRepository
-    },
+    ...jest.requireActual('@aws-sdk/lib-dynamodb'),
     PutCommand: jest.fn().mockImplementation((input: any) => input), // Return input for easy assertion
     QueryCommand: jest.fn().mockImplementation((input: any) => input), // Return input for easy assertion
+    UpdateCommand: jest.fn().mockImplementation((input: any) => input),
 }));
 
 // Mock envDynamoDB
@@ -122,7 +122,7 @@ describe('UserRepository', () => {
         });
 
         it('should update an existing user and return the user with existing ID', async () => {
-            const existingUser: User = { ...mockUser, id: 'existing-id' };
+            const existingUser: User = { ...mockUser, id: 'existing-id', videos: [], name: 'Test User', clientId: 'client123' };
             jest.spyOn(userRepository, 'findByClientId').mockResolvedValue(existingUser);
 
             const mockUserModelInstance = {
@@ -202,6 +202,62 @@ describe('UserRepository', () => {
             expect(mockFromDb).not.toHaveBeenCalled();
             expect(mockToDomain).not.toHaveBeenCalled();
             expect(foundUser).toBeNull();
+        });
+    });
+
+    describe('addVideoToUser', () => {
+        it('should add a video to a user and return the updated user', async () => {
+            const existingUser = new User();
+            existingUser.id = 'user-123';
+            existingUser.clientId = 'client-abc';
+            existingUser.name = 'Test User';
+            existingUser.videos = [];
+
+            const newVideo = new Video();
+            newVideo.id = 'video-456';
+            newVideo.name = 'New Video';
+            newVideo.status = EVideoStatus.UPLOADED;
+            newVideo.url = 'http://example.com/video.mp4';
+
+            jest.spyOn(userRepository, 'findByClientId').mockResolvedValue(existingUser);
+
+            const userModelInstance = { id: existingUser.id, client_id: existingUser.clientId, name: existingUser.name, videos: [] as UserModelVideo[] };
+            mockFromDomain.mockReturnValue(userModelInstance);
+
+            const updatedUserDomain = { ...existingUser, videos: [newVideo] };
+            mockToDomain.mockReturnValue(updatedUserDomain);
+
+            mockDynamoBDDocClientSend.mockResolvedValue({});
+
+            const result = await userRepository.addVideoToUser('client-abc', newVideo);
+
+            expect(userRepository.findByClientId).toHaveBeenCalledWith('client-abc');
+            expect(UpdateCommand).toHaveBeenCalledWith({
+                TableName: 'MockTableName',
+                Key: { id: existingUser.id },
+                UpdateExpression: `
+              SET videos = list_append(if_not_exists(videos, :emptyList), :newVideo)
+            `,
+                ExpressionAttributeValues: {
+                    ':newVideo': [newVideo],
+                    ':emptyList': [],
+                },
+            });
+            expect(mockDynamoBDDocClientSend).toHaveBeenCalledWith(expect.any(Object));
+            expect(mockToDomain).toHaveBeenCalledWith({ ...userModelInstance, videos: [newVideo] });
+            expect(result).toEqual(updatedUserDomain);
+        });
+
+        it('should throw an error if user is not found', async () => {
+            jest.spyOn(userRepository, 'findByClientId').mockResolvedValue(null);
+
+            const newVideo = new Video();
+            newVideo.id = 'video-456';
+
+            await expect(userRepository.addVideoToUser('non-existent-client', newVideo)).rejects.toThrow('User not found');
+
+            expect(UpdateCommand).not.toHaveBeenCalled();
+            expect(mockDynamoBDDocClientSend).not.toHaveBeenCalled();
         });
     });
 });
