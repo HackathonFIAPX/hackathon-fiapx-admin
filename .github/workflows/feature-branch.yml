@@ -1,0 +1,10 @@
+name: Feature Branch Pipeline
+
+on:
+  pull_request:
+
+jobs:
+  sonar-tests:
+    uses: ./.github/workflows/sonarcloud.yml
+    secrets:
+      sonar_token: ${{ secrets.SONAR_TOKEN }}
