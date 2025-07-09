@@ -72,6 +72,14 @@ export class UserRepository implements IUserRepository {
 
         const model = UserModel.fromDomain(userFound);
 
+        Logger.info({
+            message: 'Adding video to user',
+            additionalInfo: {
+                user: model,
+                video: video
+            }
+        });
+
         const command = new UpdateCommand({
             TableName: envDynamoDB.tableName,
             Key: { id: model.id },
@@ -79,7 +87,7 @@ export class UserRepository implements IUserRepository {
               SET videos = list_append(if_not_exists(videos, :emptyList), :newVideo)
             `,
             ExpressionAttributeValues: {
-              ":newVideo": [video],
+              ":newVideo": [JSON.parse(JSON.stringify(video))],
               ":emptyList": []
             }
         });
