@@ -8,6 +8,6 @@ const getAllVideosByUserController = container.resolve<IController>('GetAllVideo
 const updateVideoController = container.resolve<IController>('UpdateVideoController');
 
 export default (route: Router): void => {
-    route.post('/v1/videos', AuthMiddleware.handle, RouterAdapter.adapt(getAllVideosByUserController))
+    route.get('/v1/videos', AuthMiddleware.handle, RouterAdapter.adapt(getAllVideosByUserController))
     route.put('/v1/private/videos', RouterAdapter.adapt(updateVideoController))
 }

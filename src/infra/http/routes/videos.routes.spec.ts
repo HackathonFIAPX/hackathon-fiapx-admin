@@ -6,10 +6,10 @@ import { IController } from '../protocols/controller'
 import { AuthMiddleware } from '../middlewares/auth.middleware'
 
 // Mock express.Router
-const mockPost = jest.fn();
+const mockGet = jest.fn();
 const mockPut = jest.fn();
 const mockRouter = {
-    post: mockPost,
+    get: mockGet,
     put: mockPut,
 } as unknown as Router;
 
@@ -46,7 +46,7 @@ describe('users.route', () => {
     });
 
     beforeEach(() => {
-        mockPost.mockClear();
+        mockGet.mockClear();
         (RouterAdapter.adapt as jest.Mock).mockClear();
     });
 
@@ -59,8 +59,8 @@ describe('users.route', () => {
         expect(RouterAdapter.adapt).toHaveBeenCalledWith(expect.any(Object));
 
         // Verify route.post calls
-        expect(mockPost).toHaveBeenCalledTimes(1);
-        expect(mockPost).toHaveBeenCalledWith('/v1/videos', AuthMiddleware.handle, 'adapted-Object');
+        expect(mockGet).toHaveBeenCalledTimes(1);
+        expect(mockGet).toHaveBeenCalledWith('/v1/videos', AuthMiddleware.handle, 'adapted-Object');
 
         // Verify route.put calls
         expect(mockPut).toHaveBeenCalledTimes(1);
