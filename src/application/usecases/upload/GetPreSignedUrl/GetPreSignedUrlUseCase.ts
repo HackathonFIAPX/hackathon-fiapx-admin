@@ -23,7 +23,7 @@ export class GetPreSignedUrlUseCase implements IGetPreSignedUrlUseCase {
 
         const userFound = await this.userRepository.findByClientId(clientId);
         if (!userFound) {
-            throw new Error('User not found');
+            throw new Error(`User not found: ${clientId}`);
         }
 
         if (contentLength > MAX_FILE_SIZE) {
