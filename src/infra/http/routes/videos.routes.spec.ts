@@ -7,17 +7,21 @@ import { AuthMiddleware } from '../middlewares/auth.middleware'
 
 // Mock express.Router
 const mockPost = jest.fn();
+const mockPut = jest.fn();
 const mockRouter = {
     post: mockPost,
+    put: mockPut,
 } as unknown as Router;
 
 // Mock tsyringe container
 jest.mock('tsyringe', () => {
     const mockGetAllVideosByUserController = {} as IController;
+    const mockUpdateVideoControllerController = {} as IController;
     return {
         container: {
             resolve: jest.fn((token: string) => {
                 if (token === 'GetAllVideosByUserController') return mockGetAllVideosByUserController;
+                if (token === 'UpdateVideoController') return mockUpdateVideoControllerController;
                 return {};
             }),
         },
@@ -38,6 +42,7 @@ describe('users.route', () => {
     // Assert container.resolve calls once, as they happen on module load
     beforeAll(() => {
         expect(container.resolve).toHaveBeenCalledWith('GetAllVideosByUserController');
+        expect(container.resolve).toHaveBeenCalledWith('UpdateVideoController');
     });
 
     beforeEach(() => {
@@ -49,11 +54,16 @@ describe('users.route', () => {
         videosRoutes(mockRouter);
 
         // Verify RouterAdapter.adapt calls
-        expect(RouterAdapter.adapt).toHaveBeenCalledTimes(1);
+        expect(RouterAdapter.adapt).toHaveBeenCalledTimes(2);
+        expect(RouterAdapter.adapt).toHaveBeenCalledWith(expect.any(Object));
         expect(RouterAdapter.adapt).toHaveBeenCalledWith(expect.any(Object));
 
         // Verify route.post calls
         expect(mockPost).toHaveBeenCalledTimes(1);
         expect(mockPost).toHaveBeenCalledWith('/v1/videos', AuthMiddleware.handle, 'adapted-Object');
+
+        // Verify route.put calls
+        expect(mockPut).toHaveBeenCalledTimes(1);
+        expect(mockPut).toHaveBeenCalledWith('/v1/private/videos', 'adapted-Object');
     });
 });

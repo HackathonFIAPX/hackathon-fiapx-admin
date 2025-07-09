@@ -32,7 +32,7 @@ describe('GetAllVideosByUserController', () => {
             tokenInfo: {
                 isValid: true,
                 payload: {
-                    client_id: { clientId: 'test-client-id' },
+                    client_id: 'test-client-id',
                 },
             },
         };

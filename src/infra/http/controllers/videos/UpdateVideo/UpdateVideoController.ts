@@ -1,23 +1,26 @@
-import { IGetAllVideosByUserUseCase } from "@application/usecases/videos/GetAllVideosByUser/IGetAllVideosByUserUseCase";
+import { IUpdateVideoUseCase } from "@application/usecases/videos/UpdateVideo/IUpdateVideoUseCase";
 import { IController } from "@infra/http/protocols/controller";
 import { HttpRequest, HttpResponse } from "@infra/http/protocols/http";
 import { HttpResponseHandler } from "@infra/http/protocols/httpResponses";
 import { inject, injectable } from "tsyringe";
 
 @injectable()
-export class GetAllVideosByUserController implements IController {
+export class UpdateVideoController implements IController {
     constructor(
-        @inject('IGetAllVideosByUserUseCase')
-        private readonly getAllVideosByUserUseCase: IGetAllVideosByUserUseCase
+        @inject("IUpdateVideoUseCase")
+        private readonly updateVideoUseCase: IUpdateVideoUseCase
     ) {}
 
     async handle(request: HttpRequest): Promise<HttpResponse> {
+        const { videoId, status } = request.body;
         const clientId = request.tokenInfo.payload.client_id;
 
-        const result = await this.getAllVideosByUserUseCase.execute({
+        const result = await this.updateVideoUseCase.execute({
             clientId,
+            videoId,
+            status,
         });
 
-        return HttpResponseHandler.ok(result)
+        return HttpResponseHandler.ok(result);
     }
 }
