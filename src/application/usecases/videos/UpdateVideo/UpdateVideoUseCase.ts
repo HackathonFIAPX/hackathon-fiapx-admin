@@ -1,4 +1,4 @@
-import { injectable } from "tsyringe";
+import { inject, injectable } from "tsyringe";
 import { IUpdateVideoUseCase } from "./IUpdateVideoUseCase";
 import { IUserRepository } from "@domain/repositories/IUserRepository";
 import { TUpdateVideoUseCaseInput, TUpdateVideoUseCaseOutput } from "./TUpdateVideoUseCase";
@@ -6,6 +6,7 @@ import { TUpdateVideoUseCaseInput, TUpdateVideoUseCaseOutput } from "./TUpdateVi
 @injectable()
 export class UpdateVideoUseCase implements IUpdateVideoUseCase {
     constructor(
+        @inject('IUserRepository')
         private userRepository: IUserRepository
     ) {}
 
