@@ -13,10 +13,12 @@ export class GetPresignedUrlController implements IController {
 
     async handle(request: HttpRequest): Promise<HttpResponse> {
         const { fileType, contentLength } = request.query;
+        const tokenInfo = request.tokenInfo;
 
         const response = await this.getPresignedUrl.execute({
             contentLength,
             fileType,
+            clientId: tokenInfo?.payload?.client_id,
         });
 
         return HttpResponseHandler.ok(response)

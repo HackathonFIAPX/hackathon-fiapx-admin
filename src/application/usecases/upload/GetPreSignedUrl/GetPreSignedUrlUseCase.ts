@@ -13,7 +13,7 @@ export class GetPreSignedUrlUseCase implements IGetPreSignedUrlUseCase {
     ) {}
 
     async execute(input: TGetPreSignedUrlUseCaseInput): Promise<TGetPreSignedUrlUseCaseOutput> {
-        const { fileType, contentLength } = input;
+        const { fileType, contentLength, clientId } = input;
 
         const fileName = `teste-${Date.now()}`;
 

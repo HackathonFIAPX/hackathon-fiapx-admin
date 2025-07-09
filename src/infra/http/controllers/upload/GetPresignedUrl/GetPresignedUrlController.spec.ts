@@ -36,6 +36,65 @@ describe('GetPresignedUrlController', () => {
             body: {},
             params: {},
             headers: {},
+            tokenInfo: {
+                payload: {
+                    client_id: 'test-user-id',
+                },
+            } as any,
+        };
+        const mockUseCaseResponse = { url: 'http://presigned.url' };
+        mockExecute.mockResolvedValue(mockUseCaseResponse);
+
+        const response = await controller.handle(mockRequest);
+
+        expect(mockExecute).toHaveBeenCalledTimes(1);
+        expect(mockExecute).toHaveBeenCalledWith({
+            fileType: 'image/jpeg',
+            contentLength: 1024,
+            clientId: 'test-user-id',
+        });
+        expect(HttpResponseHandler.ok).toHaveBeenCalledTimes(1);
+        expect(HttpResponseHandler.ok).toHaveBeenCalledWith(mockUseCaseResponse);
+        expect(response).toEqual({ statusCode: 200, body: mockUseCaseResponse });
+    });
+
+    it('should call getPresignedUrl.execute without tokenInfo and return ok response', async () => {
+        const mockRequest: HttpRequest = {
+            query: {
+                fileType: 'image/jpeg',
+                contentLength: 1024,
+            },
+            body: {},
+            params: {},
+            headers: {},
+        };
+        const mockUseCaseResponse = { url: 'http://presigned.url' };
+        mockExecute.mockResolvedValue(mockUseCaseResponse);
+
+        const response = await controller.handle(mockRequest);
+
+        expect(mockExecute).toHaveBeenCalledTimes(1);
+        expect(mockExecute).toHaveBeenCalledWith({
+            fileType: 'image/jpeg',
+            contentLength: 1024,
+        });
+        expect(HttpResponseHandler.ok).toHaveBeenCalledTimes(1);
+        expect(HttpResponseHandler.ok).toHaveBeenCalledWith(mockUseCaseResponse);
+        expect(response).toEqual({ statusCode: 200, body: mockUseCaseResponse });
+    });
+
+    it('should call getPresignedUrl.execute without token client_id on payload and return ok response', async () => {
+        const mockRequest: HttpRequest = {
+            query: {
+                fileType: 'image/jpeg',
+                contentLength: 1024,
+            },
+            body: {},
+            params: {},
+            headers: {},
+            tokenInfo: {
+                payload: {},
+            } as any,
         };
         const mockUseCaseResponse = { url: 'http://presigned.url' };
         mockExecute.mockResolvedValue(mockUseCaseResponse);

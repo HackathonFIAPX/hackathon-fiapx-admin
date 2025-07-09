@@ -27,6 +27,7 @@ describe('GetPreSignedUrlUseCase', () => {
         const input: TGetPreSignedUrlUseCaseInput = {
             fileType: 'mp4',
             contentLength: 5 * 1024 * 1024, // 5 MB
+            clientId: 'test-client-id',
         };
         const mockS3Response = {
             url: 'https://mock-presigned-url.s3.amazonaws.com/mock-key',
@@ -54,6 +55,7 @@ describe('GetPreSignedUrlUseCase', () => {
         const input: TGetPreSignedUrlUseCaseInput = {
             fileType: 'mp4',
             contentLength: 11 * 1024 * 1024 * 1024, // 11 GB (exceeds 10 GB limit)
+            clientId: 'test-client-id',
         };
 
         await expect(useCase.execute(input)).rejects.toThrow(
