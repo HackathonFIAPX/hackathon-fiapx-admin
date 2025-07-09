@@ -13,15 +13,19 @@ export class RouterAdapter {
         headers: req.headers,
       }
   
-      const httpResponse = await controller.handle(httpRequest)
+      try {
+        const httpResponse = await controller.handle(httpRequest)
 
-      if (httpResponse.headers) {
-        res.set(httpResponse.headers)
+        if (httpResponse.headers) {
+          res.set(httpResponse.headers)
+        }
+    
+        res.status(httpResponse.statusCode).json(httpResponse.body)
+        
+        next()
+      } catch (error) {
+        next(error)
       }
-  
-      res.status(httpResponse.statusCode).json(httpResponse.body)
-      
-      next()
     }
   }
 }
