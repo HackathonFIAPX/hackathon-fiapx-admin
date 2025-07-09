@@ -9,6 +9,7 @@ const mockSave = jest.fn();
 const mockUserRepository: IUserRepository = {
     findByClientId: mockFindByClientId,
     save: mockSave,
+    addVideoToUser: jest.fn(),
 };
 
 describe('CreateUserUseCase', () => {
