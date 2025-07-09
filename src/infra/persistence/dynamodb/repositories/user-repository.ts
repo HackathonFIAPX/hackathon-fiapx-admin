@@ -79,4 +79,29 @@ export class UserRepository implements IUserRepository {
         model.videos.push(video);
         return UserModel.toDomain(model);
     }
+
+    async updateVideo(clientId: string, updatedVideo: Video): Promise<Video> {
+        const userFound = await this.findByClientId(clientId);
+        if (!userFound) {
+            throw new Error('User not found');
+        }
+
+        const user = UserModel.fromDomain(userFound);
+
+        const updatedVideos = user.videos.map(video =>
+            video.id === updatedVideo.id ? updatedVideo : video
+        );
+
+        const command = new UpdateCommand({
+            TableName: envDynamoDB.tableName,
+            Key: { id: user.id },
+            UpdateExpression: "SET videos = :videos",
+            ExpressionAttributeValues: {
+                ":videos": updatedVideos
+            }
+        });
+    
+        await this.dynamoBDDocClient.send(command);
+        return updatedVideo;
+    }
 }

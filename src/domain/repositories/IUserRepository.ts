@@ -5,4 +5,5 @@ export interface IUserRepository {
     save(user: Omit<User, 'id'>): Promise<User>;
     findByClientId(clientId: string): Promise<User | null>;
     addVideoToUser(clientId: string, video: Video): Promise<User>;
+    updateVideo(clientId: string, video: Video): Promise<Video>;
 }
