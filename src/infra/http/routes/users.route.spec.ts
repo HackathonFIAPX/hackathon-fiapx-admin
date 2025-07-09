@@ -43,6 +43,7 @@ describe('users.route', () => {
         expect(container.resolve).toHaveBeenCalledWith('UserLoginController');
         expect(container.resolve).toHaveBeenCalledWith('UserSignUpController');
         expect(container.resolve).toHaveBeenCalledWith('ValidateTokenController');
+        expect(container.resolve).toHaveBeenCalledWith('CreateUserController');
     });
 
     beforeEach(() => {
@@ -54,15 +55,17 @@ describe('users.route', () => {
         usersRoutes(mockRouter);
 
         // Verify RouterAdapter.adapt calls
-        expect(RouterAdapter.adapt).toHaveBeenCalledTimes(3);
+        expect(RouterAdapter.adapt).toHaveBeenCalledTimes(4);
         expect(RouterAdapter.adapt).toHaveBeenCalledWith(expect.any(Object)); // Use expect.any(Object)
+        expect(RouterAdapter.adapt).toHaveBeenCalledWith(expect.any(Object));
         expect(RouterAdapter.adapt).toHaveBeenCalledWith(expect.any(Object));
         expect(RouterAdapter.adapt).toHaveBeenCalledWith(expect.any(Object));
 
         // Verify route.post calls
-        expect(mockPost).toHaveBeenCalledTimes(3);
+        expect(mockPost).toHaveBeenCalledTimes(4);
         expect(mockPost).toHaveBeenCalledWith('/v1/users/login', 'adapted-Object');
         expect(mockPost).toHaveBeenCalledWith('/v1/users/signup', 'adapted-Object');
         expect(mockPost).toHaveBeenCalledWith('/v1/users/validate-token', 'adapted-Object');
+        expect(mockPost).toHaveBeenCalledWith('/v1/users', 'adapted-Object');
     });
 });
