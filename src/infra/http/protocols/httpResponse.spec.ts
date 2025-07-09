@@ -54,4 +54,15 @@ describe("HttpResponseHandler", () => {
       statusCode: EHttpStatusCode.CREATED,
     });
   });
+
+  it("when created is called should return status 201 and data", () => {
+    const data = { id: 1, name: "Created" };
+    const response = HttpResponseHandler.unauthorized(data);
+
+    expect(response).toEqual({
+      body: data,
+      statusCode: EHttpStatusCode.UNAUTHORIZED,
+      type: 'json'
+    });
+  });
 });
