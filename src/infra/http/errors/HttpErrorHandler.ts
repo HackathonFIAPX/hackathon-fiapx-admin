@@ -34,7 +34,7 @@ export class HttpErrorHandler {
     }
 }
 
-function createHttpErrorLog(err: any, statusCode: number): TLog {
+export function createHttpErrorLog(err: any, statusCode: number): TLog {
     let additionalErrorInfo = null
     if (err instanceof HttpError) {
         additionalErrorInfo = err.additionalInfo
