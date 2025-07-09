@@ -3,6 +3,7 @@ import { CreateUserController } from "@infra/http/controllers/users/create/Creat
 import { UserLoginController } from "@infra/http/controllers/users/login/UserLoginController";
 import { UserSignUpController } from "@infra/http/controllers/users/signup/UserSignUpController";
 import { ValidateTokenController } from "@infra/http/controllers/users/validate-token/ValidateTokenController";
+import { GetAllVideosByUserController } from "@infra/http/controllers/videos/GetAllVideosByUser/GetAllVideosByUserController";
 import { IController } from "@infra/http/protocols/controller";
 import { container } from "tsyringe";
 
@@ -14,3 +15,6 @@ container.registerSingleton<IController>('UserSignUpController', UserSignUpContr
 container.registerSingleton<IController>('UserLoginController', UserLoginController);
 container.registerSingleton<IController>('ValidateTokenController', ValidateTokenController);
 container.registerSingleton<IController>('CreateUserController', CreateUserController);
+
+// video controllers
+container.registerSingleton<IController>('GetAllVideosByUserController', GetAllVideosByUserController);
