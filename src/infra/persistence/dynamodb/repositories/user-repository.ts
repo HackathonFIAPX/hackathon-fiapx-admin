@@ -1,9 +1,10 @@
 import { User } from "@domain/models/User";
 import { IUserRepository } from "@domain/repositories/IUserRepository";
 import { DynamoDBConnector } from "../dynamo-db-connector";
-import { DynamoDBDocumentClient, PutCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBDocumentClient, PutCommand, QueryCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 import { envDynamoDB } from "@config/variables/dynamodb";
 import { UserModel } from "../models/user.model";
+import { Video } from "@domain/models/Video";
 
 export class UserRepository implements IUserRepository {
     private dynamoBDDocClient: DynamoDBDocumentClient
@@ -51,6 +52,31 @@ export class UserRepository implements IUserRepository {
         
         const model = UserModel.fromDb(response.Items[0]);
     
+        return UserModel.toDomain(model);
+    }
+
+    async addVideoToUser(clientId: string, video: Video): Promise<User> {
+        const userFound = await this.findByClientId(clientId);
+        if (!userFound) {
+            throw new Error('User not found');
+        }
+
+        const model = UserModel.fromDomain(userFound);
+
+        const command = new UpdateCommand({
+            TableName: envDynamoDB.tableName,
+            Key: { id: model.id },
+            UpdateExpression: `
+              SET videos = list_append(if_not_exists(videos, :emptyList), :newVideo)
+            `,
+            ExpressionAttributeValues: {
+              ":newVideo": [video],
+              ":emptyList": []
+            }
+        });
+
+        await this.dynamoBDDocClient.send(command);
+        model.videos.push(video);
         return UserModel.toDomain(model);
     }
 }
