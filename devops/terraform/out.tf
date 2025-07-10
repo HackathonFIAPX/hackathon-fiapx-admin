@@ -13,7 +13,3 @@ output "cognito_user_pool_id" {
 output "upload_video_sns_topic_arn" {
   value = aws_sns_topic.video_upload_topic.arn
 }
-
-output "admin_service_api_url" {
-  value = aws_apigatewayv2_api.ecs_api.api_endpoint
-}
