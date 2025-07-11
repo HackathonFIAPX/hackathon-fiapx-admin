@@ -54,13 +54,15 @@ describe('users.route', () => {
         videosRoutes(mockRouter);
 
         // Verify RouterAdapter.adapt calls
-        expect(RouterAdapter.adapt).toHaveBeenCalledTimes(2);
+        expect(RouterAdapter.adapt).toHaveBeenCalledTimes(3);
+        expect(RouterAdapter.adapt).toHaveBeenCalledWith(expect.any(Object));
         expect(RouterAdapter.adapt).toHaveBeenCalledWith(expect.any(Object));
         expect(RouterAdapter.adapt).toHaveBeenCalledWith(expect.any(Object));
 
         // Verify route.post calls
-        expect(mockGet).toHaveBeenCalledTimes(1);
+        expect(mockGet).toHaveBeenCalledTimes(2);
         expect(mockGet).toHaveBeenCalledWith('/v1/videos', AuthMiddleware.handle, 'adapted-Object');
+        expect(mockGet).toHaveBeenCalledWith('/v1/videos/:videoId/presigned/zip', AuthMiddleware.handle, 'adapted-Object');
 
         // Verify route.put calls
         expect(mockPut).toHaveBeenCalledTimes(1);

@@ -10,6 +10,8 @@ import { IValidateTokenUseCase } from "@application/usecases/users/validate-toke
 import { ValidateTokenUseCase } from "@application/usecases/users/validate-token/ValidateTokenUseCase";
 import { GetAllVideosByUserUseCase } from "@application/usecases/videos/GetAllVideosByUser/GetAllVideosByUserUseCase";
 import { IGetAllVideosByUserUseCase } from "@application/usecases/videos/GetAllVideosByUser/IGetAllVideosByUserUseCase";
+import { GetPresignedURLToZipUseCase } from "@application/usecases/videos/GetPresignedURLToZip/GetPresignedURLToZipUseCase";
+import { IGetPresignedURLToZipUseCase } from "@application/usecases/videos/GetPresignedURLToZip/IGetPresignedURLToZipUseCase";
 import { IUpdateVideoUseCase } from "@application/usecases/videos/UpdateVideo/IUpdateVideoUseCase";
 import { UpdateVideoUseCase } from "@application/usecases/videos/UpdateVideo/UpdateVideoUseCase";
 import { container } from "tsyringe";
@@ -26,3 +28,4 @@ container.registerSingleton<ICreateUserUseCase>('ICreateUserUseCase', CreateUser
 // videos
 container.registerSingleton<IGetAllVideosByUserUseCase>('IGetAllVideosByUserUseCase', GetAllVideosByUserUseCase);
 container.registerSingleton<IUpdateVideoUseCase>('IUpdateVideoUseCase', UpdateVideoUseCase);
+container.registerSingleton<IGetPresignedURLToZipUseCase>('IGetPresignedURLToZipUseCase', GetPresignedURLToZipUseCase);
