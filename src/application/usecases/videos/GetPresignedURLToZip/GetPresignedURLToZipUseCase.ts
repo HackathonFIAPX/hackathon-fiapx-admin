@@ -20,7 +20,7 @@ export class GetPresignedURLToZipUseCase implements IGetPresignedURLToZipUseCase
             }
         });
 
-        const bucketName = envS3.bucketName;
+        const bucketName = 'fiapx-video-fps-bucket';
 
         const key = `${clientId}/${videoId}/final_result.zip`;
 
