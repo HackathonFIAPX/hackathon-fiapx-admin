@@ -22,7 +22,7 @@ export class GetPresignedURLToZipUseCase implements IGetPresignedURLToZipUseCase
 
         const bucketName = envS3.bucketName;
 
-        const key = `temp_fps/${clientId}/${videoId}/final_result.zip`;
+        const key = `${clientId}/${videoId}/final_result.zip`;
 
         const command = new GetObjectCommand({
             Bucket: bucketName,
