@@ -5,6 +5,7 @@ import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { envAWS } from "@config/variables/aws";
 import { envS3 } from "@config/variables/s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { Logger } from "@infra/utils/logger/Logger";
 
 @injectable()
 export class GetPresignedURLToZipUseCase implements IGetPresignedURLToZipUseCase {
@@ -24,6 +25,10 @@ export class GetPresignedURLToZipUseCase implements IGetPresignedURLToZipUseCase
 
         const key = `${clientId}/${videoId}/final_result.zip`;
 
+        Logger.info({ 
+            message: `Generating presigned URL for S3 object: ${bucketName}/${key}`,
+            additionalInfo: { clientId, videoId }
+        });
         const command = new GetObjectCommand({
             Bucket: bucketName,
             Key: key,
